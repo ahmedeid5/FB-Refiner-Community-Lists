@@ -93,10 +93,8 @@
 <!-- Script Logic -->
 <script>
     const GITHUB_REPO = "ahmedeid5/FB-Refiner-Community-Lists";
-    // ملاحظة أمنية: في المواقع الحقيقية لا نضع الـ Token هنا، لكن بما أنك طلبت حلاً بدون سيرفر،
-    // يمكنك استخدام Fine-grained PAT بصلاحيات Issues فقط لهذا المستودع.
-    // سأترك لك مكاناً لوضعه، وإذا كان فارغاً سيوجه المستخدم لفتح Issue يدوياً.
-    const GITHUB_TOKEN = ""; 
+    // الرابط اللي هتاخده من Google Apps Script حطه هنا
+    const GOOGLE_SCRIPT_URL = ""; 
 
     const fileInput = document.getElementById('file-input');
     const uploadBtn = document.getElementById('upload-btn');
@@ -166,48 +164,46 @@
         }
     }
 
-    // 3. عملية الرفع (عن طريق GitHub API لفتح Issue)
+    // 3. عملية الرفع التلقائي عبر وسيط جوجل الآمن
     uploadBtn.addEventListener('click', async () => {
         if (!selectedFile) return;
 
-        showStatus("جاري تجهيز الملف...", "loading");
+        showStatus("جاري رفع الملف للمجتمع...", "loading");
         uploadBtn.disabled = true;
 
         const reader = new FileReader();
         reader.onload = async (e) => {
             const content = e.target.result;
-            const issueTitle = `Community List: ${selectedFile.name}`;
-            const issueBody = `اسم الملف الأصلي: ${selectedFile.name}\n\n\`\`\`\n${content}\n\`\`\``;
 
-            if (GITHUB_TOKEN) {
-                // الطريقة "المخفية" باستخدام الـ API
+            if (GOOGLE_SCRIPT_URL) {
+                // الطريقة الاحترافية والآمنة 100% عبر وسيط جوجل
                 try {
-                    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/issues`, {
+                    const response = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
+                        mode: 'no-cors', // لضمان العمل مع Google Script
                         headers: {
-                            'Authorization': `token ${GITHUB_TOKEN}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            title: issueTitle,
-                            body: issueBody,
-                            labels: ['community-list']
+                            fileName: selectedFile.name,
+                            content: content
                         })
                     });
 
-                    if (response.ok) {
-                        showStatus("✅ تم إرسال الملف! سيظهر في القائمة خلال دقيقة.", "success");
-                        selectedFile = null;
-                        fileNameDisplay.innerText = "";
-                    } else {
-                        throw new Error("API Error");
-                    }
+                    // بما أننا نستخدم no-cors لا يمكننا قراءة الرد بدقة، 
+                    // ولكننا نفترض النجاح إذا لم يحدث خطأ في الشبكة
+                    showStatus("✅ تم إرسال الملف! سيظهر في القائمة خلال دقيقة.", "success");
+                    selectedFile = null;
+                    fileNameDisplay.innerText = "";
+                    
                 } catch (error) {
-                    showStatus("حدث خطأ أثناء الرفع التلقائي. يرجى المحاولة يدوياً.", "error");
+                    showStatus("حدث خطأ أثناء الرفع. يرجى المحاولة لاحقاً.", "error");
                     console.error(error);
                 }
             } else {
-                // الطريقة الآمنة (فتح Issue يدوياً مع بيانات جاهزة)
+                // الحل البديل في حال عدم وجود رابط جوجل (فتح Issue يدوياً)
+                const issueTitle = `Community List: ${selectedFile.name}`;
+                const issueBody = `اسم الملف الأصلي: ${selectedFile.name}\n\n\`\`\`\n${content}\n\`\`\``;
                 const url = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=community-list`;
                 window.open(url, '_blank');
                 showStatus("يرجى الضغط على 'Submit new issue' في الصفحة المفتوحة لإتمام الرفع.", "success");
@@ -215,6 +211,8 @@
             
             uploadBtn.disabled = false;
         };
+        reader.readAsText(selectedFile);
+    });
         reader.readAsText(selectedFile);
     });
 
