@@ -164,11 +164,11 @@
         }
     }
 
-    // 3. عملية الرفع التلقائي عبر وسيط جوجل الآمن
+    // 3. عملية الرفع التلقائي (الرفع المباشر للمستودع)
     uploadBtn.addEventListener('click', async () => {
         if (!selectedFile) return;
 
-        showStatus("جاري رفع الملف للمجتمع...", "loading");
+        showStatus("جاري الرفع المباشر للمستودع...", "loading");
         uploadBtn.disabled = true;
 
         const reader = new FileReader();
@@ -176,11 +176,11 @@
             const content = e.target.result;
 
             if (GOOGLE_SCRIPT_URL) {
-                // الطريقة الاحترافية والآمنة 100% عبر وسيط جوجل
                 try {
-                    const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    // إرسال البيانات لوسيط جوجل
+                    await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
-                        mode: 'no-cors', // لضمان العمل مع Google Script
+                        mode: 'no-cors', 
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -190,27 +190,30 @@
                         })
                     });
 
-                    // بما أننا نستخدم no-cors لا يمكننا قراءة الرد بدقة، 
-                    // ولكننا نفترض النجاح إذا لم يحدث خطأ في الشبكة
-                    showStatus("✅ تم إرسال الملف! سيظهر في القائمة خلال دقيقة.", "success");
+                    // في وضع no-cors لا يمكننا التأكد من الرد، لكننا نعطي مهلة ثم نحدث القائمة
+                    showStatus("✅ تم طلب الرفع! سيظهر الملف في القائمة خلال ثوانٍ.", "success");
                     selectedFile = null;
                     fileNameDisplay.innerText = "";
                     
+                    // تحديث القائمة بعد 5 ثوانٍ لضمان وصول الملف
+                    setTimeout(loadFiles, 5000);
+                    
                 } catch (error) {
-                    showStatus("حدث خطأ أثناء الرفع. يرجى المحاولة لاحقاً.", "error");
+                    showStatus("حدث خطأ في الاتصال. تأكد من إعدادات وسيط جوجل.", "error");
                     console.error(error);
                 }
             } else {
-                // الحل البديل في حال عدم وجود رابط جوجل (فتح Issue يدوياً)
                 const issueTitle = `Community List: ${selectedFile.name}`;
                 const issueBody = `اسم الملف الأصلي: ${selectedFile.name}\n\n\`\`\`\n${content}\n\`\`\``;
                 const url = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=community-list`;
                 window.open(url, '_blank');
-                showStatus("يرجى الضغط على 'Submit new issue' في الصفحة المفتوحة لإتمام الرفع.", "success");
+                showStatus("يرجى إكمال الرفع يدوياً عبر صفحة جيت هب.", "info");
             }
             
             uploadBtn.disabled = false;
         };
+        reader.readAsText(selectedFile);
+    });
         reader.readAsText(selectedFile);
     });
         reader.readAsText(selectedFile);
