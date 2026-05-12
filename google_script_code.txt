@@ -1,0 +1,62 @@
+// كود Google Apps Script للرفع المباشر إلى GitHub
+// انقل هذا الكود إلى مشروع جديد في https://script.google.com/
+
+function doPost(e) {
+  // 1. ضع التوكين الخاص بك هنا (GitHub Personal Access Token)
+  // يجب أن يبدأ بـ ghp_ وله صلاحيات repo
+  var GITHUB_TOKEN = "ضع_التوكين_الخاص_بك_هنا"; 
+  
+  var REPO_OWNER = "ahmedeid5";
+  var REPO_NAME = "FB-Refiner-Community-Lists";
+
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var content = data.content;
+    var originalName = data.fileName;
+    
+    // 2. تنظيف اسم الملف وإضافة تايم-ستامب لمنع التكرار
+    var timestamp = Math.floor(Date.now() / 1000);
+    var cleanName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
+    var fileName = timestamp + "_" + cleanName;
+    
+    // 3. تحويل المحتوى لـ Base64 (شرط أساسي لـ GitHub API)
+    var blob = Utilities.newBlob(content);
+    var base64Content = Utilities.base64Encode(blob.getBytes());
+
+    // 4. تجهيز الطلب لـ GitHub API (الرفع المباشر للمجلد)
+    var url = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/community-lists/" + fileName;
+    
+    var payload = {
+      "message": "Add community list: " + originalName,
+      "content": base64Content,
+      "branch": "main"
+    };
+
+    var options = {
+      "method": "put",
+      "contentType": "application/json",
+      "headers": { 
+        "Authorization": "token " + GITHUB_TOKEN,
+        "Accept": "application/vnd.github.v3+json"
+      },
+      "payload": JSON.stringify(payload),
+      "muteHttpExceptions": true
+    };
+
+    var response = UrlFetchApp.fetch(url, options);
+    var responseCode = response.getResponseCode();
+    var responseBody = response.getContentText();
+    
+    if (responseCode == 201 || responseCode == 200) {
+      return ContentService.createTextOutput(JSON.stringify({status: "success", fileName: fileName}))
+        .setMimeType(ContentService.MimeType.JSON);
+    } else {
+      return ContentService.createTextOutput(JSON.stringify({status: "error", code: responseCode, message: responseBody}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({status: "error", message: err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
