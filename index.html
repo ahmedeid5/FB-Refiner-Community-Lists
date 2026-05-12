@@ -164,52 +164,49 @@
         }
     }
 
-    // 3. عملية الرفع التلقائي (الرفع المباشر للمستودع)
-    uploadBtn.addEventListener('click', async () => {
+    // 3. عملية الرفع عبر فورم خفية (أضمن طريقة لتجنب مشاكل الأمان)
+    uploadBtn.addEventListener('click', () => {
         if (!selectedFile) return;
 
-        showStatus("جاري الرفع المباشر للمستودع...", "loading");
+        showStatus("جاري تجهيز الملف للرفع...", "loading");
         uploadBtn.disabled = true;
 
         const reader = new FileReader();
-        reader.onload = async (e) => {
+        reader.onload = (e) => {
             const content = e.target.result;
 
             if (GOOGLE_SCRIPT_URL) {
-                try {
-                    // إرسال البيانات لوسيط جوجل
-                    await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors', 
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            fileName: selectedFile.name,
-                            content: content
-                        })
-                    });
+                // إنشاء فورم مؤقتة لإرسال البيانات بطريقة POST التقليدية
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = GOOGLE_SCRIPT_URL;
+                form.target = '_blank'; // سيفتح في نافذة/تبويب جديد لضمان الرفع وتخطي CORS
 
-                    // في وضع no-cors لا يمكننا التأكد من الرد، لكننا نعطي مهلة ثم نحدث القائمة
-                    showStatus("✅ تم طلب الرفع! سيظهر الملف في القائمة خلال ثوانٍ.", "success");
-                    selectedFile = null;
-                    fileNameDisplay.innerText = "";
-                    
-                    // تحديث القائمة بعد 5 ثوانٍ لضمان وصول الملف
-                    setTimeout(loadFiles, 5000);
-                    
-                } catch (error) {
-                    showStatus("حدث خطأ في الاتصال. تأكد من إعدادات وسيط جوجل.", "error");
-                    console.error(error);
-                }
+                const fileField = document.createElement('input');
+                fileField.type = 'hidden';
+                fileField.name = 'fileName';
+                fileField.value = selectedFile.name;
+                form.appendChild(fileField);
+
+                const contentField = document.createElement('input');
+                contentField.type = 'hidden';
+                contentField.name = 'content';
+                contentField.value = content;
+                form.appendChild(contentField);
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+
+                showStatus("✅ تم إرسال طلب الرفع! سيظهر الملف في القائمة خلال ثوانٍ.", "success");
+                selectedFile = null;
+                fileNameDisplay.innerText = "";
+                
+                // تحديث القائمة بعد فترة بسيطة
+                setTimeout(loadFiles, 5000);
             } else {
-                const issueTitle = `Community List: ${selectedFile.name}`;
-                const issueBody = `اسم الملف الأصلي: ${selectedFile.name}\n\n\`\`\`\n${content}\n\`\`\``;
-                const url = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=community-list`;
-                window.open(url, '_blank');
-                showStatus("يرجى إكمال الرفع يدوياً عبر صفحة جيت هب.", "info");
+                showStatus("رابط وسيط جوجل غير موجود!", "error");
             }
-            
             uploadBtn.disabled = false;
         };
         reader.readAsText(selectedFile);

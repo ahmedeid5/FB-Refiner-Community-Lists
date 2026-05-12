@@ -10,13 +10,17 @@ function doPost(e) {
   var REPO_NAME = "FB-Refiner-Community-Lists";
 
   try {
-    var data = JSON.parse(e.postData.contents);
-    var content = data.content;
-    var originalName = data.fileName;
+    // استقبال البيانات بطريقة الفورم (المتوافقة مع طريقة الموقع الجديدة)
+    var fileNameOriginal = e.parameter.fileName;
+    var content = e.parameter.content;
     
+    if (!content || !fileNameOriginal) {
+       throw new Error("Missing data: fileName or content");
+    }
+
     // 2. تنظيف اسم الملف وإضافة تايم-ستامب لمنع التكرار
     var timestamp = Math.floor(Date.now() / 1000);
-    var cleanName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
+    var cleanName = fileNameOriginal.replace(/[^a-zA-Z0-9._-]/g, '_');
     var fileName = timestamp + "_" + cleanName;
     
     // 3. تحويل المحتوى لـ Base64 (شرط أساسي لـ GitHub API)
@@ -27,7 +31,7 @@ function doPost(e) {
     var url = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/community-lists/" + fileName;
     
     var payload = {
-      "message": "Add community list: " + originalName,
+      "message": "Direct upload via Google Proxy: " + fileNameOriginal,
       "content": base64Content,
       "branch": "main"
     };
@@ -48,15 +52,17 @@ function doPost(e) {
     var responseBody = response.getContentText();
     
     if (responseCode == 201 || responseCode == 200) {
-      return ContentService.createTextOutput(JSON.stringify({status: "success", fileName: fileName}))
-        .setMimeType(ContentService.MimeType.JSON);
+      // رد نجاح بصيغة HTML ليظهر للمستخدم في النافذة الجديدة
+      return HtmlService.createHtmlOutput("<html><body style='font-family:sans-serif; text-align:center; padding-top:50px;'>" +
+                                          "<h2>✅ تم الرفع بنجاح!</h2>" +
+                                          "<p>تم إضافة الملف '" + fileNameOriginal + "' إلى المستودع.</p>" +
+                                          "<p>يمكنك إغلاق هذه النافذة الآن.</p>" +
+                                          "<script>setTimeout(window.close, 5000);</script></body></html>");
     } else {
-      return ContentService.createTextOutput(JSON.stringify({status: "error", code: responseCode, message: responseBody}))
-        .setMimeType(ContentService.MimeType.JSON);
+      return HtmlService.createHtmlOutput("<h2>❌ حدث خطأ أثناء الرفع</h2><p>كود الخطأ: " + responseCode + "</p><pre>" + responseBody + "</pre>");
     }
     
   } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({status: "error", message: err.toString()}))
-      .setMimeType(ContentService.MimeType.JSON);
+    return HtmlService.createHtmlOutput("<h2>❌ حدث خطأ تقني</h2><p>" + err.toString() + "</p>");
   }
 }
