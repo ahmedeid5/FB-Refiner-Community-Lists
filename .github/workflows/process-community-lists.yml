@@ -1,0 +1,85 @@
+name: Process Community Lists
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  process_list:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'community-list')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract file data
+        id: extract
+        run: |
+          ISSUE_BODY="${{ github.event.issue.body }}"
+          
+          # Extract original filename
+          ORIGINAL_NAME=$(echo "$ISSUE_BODY" | grep "اسم الملف الأصلي:" | sed 's/.*: //' | xargs)
+          
+          # Default name if empty
+          if [ -z "$ORIGINAL_NAME" ]; then
+            ORIGINAL_NAME="list_${{ github.event.issue.number }}.txt"
+          fi
+          
+          # Clean filename (only allow alphanumeric, dots, dashes, underscores)
+          CLEAN_NAME=$(echo "$ORIGINAL_NAME" | sed 's/[^a-zA-Z0-9._-]/_/g')
+          
+          TIMESTAMP=$(date +%s)
+          FILE_NAME="${TIMESTAMP}_${CLEAN_NAME}"
+          
+          # Extract content between triple backticks
+          # This handles content that might span multiple lines
+          echo "Extracting content..."
+          # Use sed to get everything between the first ``` and the last ```
+          CONTENT=$(echo "$ISSUE_BODY" | sed -n '/^```$/,/^```$/p' | sed '1d;$d')
+          
+          if [ -z "$CONTENT" ]; then
+            echo "Error: No content found between triple backticks."
+            exit 1
+          fi
+
+          mkdir -p community-lists
+          echo "$CONTENT" > "community-lists/${FILE_NAME}"
+          
+          echo "file_name=${FILE_NAME}" >> $GITHUB_OUTPUT
+          echo "original_name=${ORIGINAL_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add community-lists/
+          git commit -m "Add community list: ${{ steps.extract.outputs.original_name }}"
+          git push
+
+      - name: Comment and close issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fileName = "${{ steps.extract.outputs.file_name }}";
+            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}`;
+            const fileUrl = `${repoUrl}/blob/main/community-lists/${fileName}`;
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **تمت المعالجة بنجاح!**\n\nتم إضافة القائمة **${{ steps.extract.outputs.original_name }}** إلى المستودع بنجاح! 🎉\n\n🔗 يمكنك عرض الملف هنا: [${fileName}](${fileUrl})\n\nشكراً لمشاركتك في مجتمع FB-Refiner! 👏`
+            });
+            
+            await github.rest.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed',
+              labels: ['community-list', 'completed']
+            });
