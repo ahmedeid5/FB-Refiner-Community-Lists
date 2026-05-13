@@ -276,7 +276,7 @@
 
         async function fetchFiles() {
             try {
-                const response = await fetch(`https://api.github.com/repos/${REPO}/contents/community-lists`);
+                const response = await fetch(`https://api.github.com/repos/${REPO}/contents/lists`);
                 const data = await response.json();
 
                 loader.style.display = 'none';
