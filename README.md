@@ -1,51 +1,58 @@
-# 🛡️ FB-Refiner Community Hub
+# 🛡️ FB-Refiner - The Ultimate Facebook Control Suite
 
-مرحباً بك في المركز المجتمعي الرسمي لإضافة **FB-Refiner**. هذا المستودع مخصص لتجميع ومشاركة قوائم الكلمات (Filter Lists) التي تساعد المستخدمين على تنظيف وتخصيص "خلاصة الأخبار" (News Feed) على فيسبوك.
-
----
-
-## 🌐 رابط الموقع الرسمي
-يمكنك تصفح وتحميل القوائم مباشرة من خلال واجهة الويب الاحترافية:
-👉 **[تصفح قوائم المجتمع من هنا](https://ahmedeid5.github.io/FB-Refiner-Community-Lists/)**
+Welcome to the official repository of **FB-Refiner**, a powerful extension designed to give you 100% control over your Facebook experience. Clean your feed, block ads, and stay protected with our community-driven suite.
 
 ---
 
-## 🎯 فكرة المشروع
-بدلاً من البحث عن كلمات لتصفيتها، يوفر لك هذا المجتمع قوائم جاهزة أعدها مستخدمون آخرون. يمكنك العثور على:
-- 🚫 قوائم كلمات محظورة (سياسة، أخبار مزعجة، إلخ).
-- 📺 قوائم تصفية الإعلانات والترويج.
-- ⚽ قوائم رياضية أو ترفيهية متخصصة.
+## 🌐 Official Website
+Explore features and download community word lists directly from our professional web interface:
+👉 **[Visit FB-Refiner Hub](https://ahmedeid5.github.io/FB-Refiner-Community-Lists/)**
 
 ---
 
-## 📥 كيفية التحميل والاستخدام
-1. ادخل على **[موقع المجتمع](https://ahmedeid5.github.io/FB-Refiner-Community-Lists/)**.
-2. استعرض القوائم المتاحة (يمكنك عمل **Preview** لمعاينة المحتوى قبل التحميل).
-3. اضغط على **Download** لتحميل ملف الـ `.txt`.
-4. افتح إضافة **FB-Refiner** في متصفحك وقم باستيراد الكلمات من الملف.
+## 🚀 Key Features
+
+### 🧹 Clean Feed Engine (Stable)
+- **Block Sponsored Ads:** Remove all promotional content.
+- **Hide Suggested Content:** No more "Recommended for you" posts.
+- **Reels Blocker:** Remove the Reels section to avoid the endless scroll trap.
+- **Custom Keywords:** Hide feed posts containing topics you want to avoid.
+
+### 🛡️ Advanced Protection (Experimental)
+- **Hold Your Finger:** Scans your comments before posting to prevent toxicity.
+- **Toxic Filter:** Automatically hides offensive comments from your view.
+- **Real-time Performance:** Ultra-fast filtering with zero lag.
 
 ---
 
-## 🤝 كيف تساهم معنا؟ (نظام المساهمة الجديد)
-نحن نعتمد نظام "القائمة المختارة" (Curated List) لضمان جودة المحتوى. إذا كنت تملك قائمة كلمات وتريد مشاركتها مع الجميع:
-
-1. اذهب إلى قسم **[Discussions](https://github.com/ahmedeid5/FB-Refiner-Community-Lists/discussions)** في هذا المستودع (يتطلب حساب GitHub).
-2. أو قم بملء **[نموذج Tally المخصص](https://tally.so/r/A7AE9y)** (لا يتطلب حساب GitHub).
-3. سيقوم مدير المشروع بمراجعة القائمة وإضافتها إلى الموقع الرسمي لتظهر للجميع.
-
-*ملاحظة: يمكنك أيضاً إرسال القوائم عبر البريد الإلكتروني أو أي وسيلة تواصل يحددها مدير المشروع.*
+## 🌍 Community Lists
+Our protection tools are powered by word lists. You can import community-created dictionaries for:
+- 🚫 Profanity & Toxicity
+- 🏛️ Political filtering
+- 📺 Ad & Spam keywords
+- ⚽ Specialized interests
 
 ---
 
-## 📁 هيكل المستودع
-- `/lists`: يحتوي على ملفات الكلمات (.txt) التي تظهر في الموقع.
-- `index.html`: واجهة الويب الاحترافية للعرض.
-- `README.md`: هذا الملف التعريفي.
+## 🤝 How to Contribute
+We believe in community-driven protection. You can contribute in two ways:
+
+1. **GitHub Discussions:** Join the [official discussions](https://github.com/ahmedeid5/FB-Refiner-Community-Lists/discussions) to share ideas or report issues.
+2. **Submit Word Lists:** Use our [Tally Form](https://tally.so/r/A7AE9y) to send your custom `.txt` word lists. We review and add them to the official hub!
 
 ---
 
-## 👨‍💻 إدارة المشروع
-هذا المشروع جزء من عائلة **FB-Refiner**. هدفنا هو توفير تجربة تصفح أنظف وأكثر خصوصية للجميع.
+## 📁 Repository Structure
+- `/lists`: Curated word lists (.txt) available for download.
+- `index.html`: The professional landing page and hub.
+- `README.md`: This documentation.
 
 ---
-**شكراً لكل من يساهم في جعل فيسبوك مكاناً أفضل!** ❤️
+
+## 🔒 Privacy & Speed
+- **100% Local:** Your data never leaves your browser.
+- **No Tracking:** We don't collect data, ever.
+- **Lightweight:** Minimal impact on CPU and RAM.
+
+---
+**FB-Refiner** - *Reclaim your focus, protect your feed.* ❤️
