@@ -65,31 +65,27 @@
             letter-spacing: -0.02em;
         }
         .brand-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #1d6bff, #1462d7);
-            display: grid;
-            place-items: center;
+            width: 54px;
+            height: 54px;
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            background: linear-gradient(180deg, #1d6bff 0%, #1462d7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            overflow: hidden;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
         }
-        .brand-icon::before {
-            content: 'V';
+        .brand-icon::after {
+            content: '';
             position: absolute;
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 46px;
-            color: rgba(255,255,255,0.12);
-            font-weight: 900;
-            letter-spacing: -0.15em;
+            inset: 8px 0 0 0;
+            background: rgba(255,255,255,0.12);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
         }
         .brand-icon .brand-letter {
             position: relative;
             z-index: 1;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: #ffffff;
             font-weight: 900;
             letter-spacing: -0.08em;
