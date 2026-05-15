@@ -65,17 +65,34 @@
             letter-spacing: -0.02em;
         }
         .brand-icon {
-            width: 46px;
-            height: 46px;
+            width: 48px;
+            height: 48px;
             border-radius: 14px;
-            background: linear-gradient(135deg, rgba(24,119,242,0.95), rgba(24,119,242,0.75));
+            background: linear-gradient(135deg, #1d6bff, #1462d7);
             display: grid;
             place-items: center;
+            position: relative;
+            overflow: hidden;
             box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
-            font-size: 1.25rem;
-            color: #fff;
+        }
+        .brand-icon::before {
+            content: 'V';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 46px;
+            color: rgba(255,255,255,0.12);
             font-weight: 900;
-            letter-spacing: -0.1em;
+            letter-spacing: -0.15em;
+        }
+        .brand-icon .brand-letter {
+            position: relative;
+            z-index: 1;
+            font-size: 0.9rem;
+            color: #ffffff;
+            font-weight: 900;
+            letter-spacing: -0.08em;
         }
         .nav-tabs {
             display: flex;
@@ -317,7 +334,7 @@
     <div class="page">
         <header class="topbar">
             <a class="brand" href="#overview">
-                <span class="brand-icon">V</span>
+                <span class="brand-icon"><span class="brand-letter">FB</span></span>
                 <span>FB-Refiner</span>
             </a>
             <div class="nav-tabs" role="tablist">
@@ -333,7 +350,6 @@
             <section id="overview" class="tabs-panel active">
                 <div class="hero">
                     <div class="hero-copy">
-                        <span class="badge">FB</span>
                         <h1>Your Facebook feed, filtered fast.</h1>
                         <p>FB-Refiner is a lightweight browser extension built around the features that matter most: blocking ads, hiding suggested content, removing reels, and delivering a cleaner, calmer feed. Everything else is secondary.</p>
                         <div class="hero-actions">
