@@ -7,17 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050608;
-            --surface: #11131a;
-            --surface-2: #171a24;
-            --border: rgba(255,255,255,0.08);
-            --primary: #4e99ff;
-            --primary-strong: #70b7ff;
-            --accent: #36ffac;
-            --warn: #ff6a51;
-            --text: #e9edf5;
-            --text-muted: #8c95ab;
-            --shadow: 0 30px 80px rgba(0,0,0,0.35);
+            --bg: #06020f;
+            --surface: #0f0b16;
+            --surface-2: #18121f;
+            --border: rgba(255,255,255,0.06);
+            --primary: #9b59ff; /* vivid purple */
+            --accent: #00e5ff;  /* electric cyan */
+            --accent-2: #ff6ad5; /* magenta pop */
+            --warn: #ff8a66;
+            --text: #f3f6fb;
+            --text-muted: #9aa3b2;
+            --shadow: 0 34px 80px rgba(6,4,10,0.6);
         }
         * { box-sizing: border-box; }
         body {
@@ -169,8 +169,8 @@
             min-width: 56px;
             height: 32px;
             border-radius: 999px;
-            background: rgba(54,255,172,0.13);
-            color: #b6ffda;
+            background: linear-gradient(90deg, rgba(155,89,255,0.12), rgba(0,229,255,0.08));
+            color: var(--text);
             font-weight: 800;
             letter-spacing: 0.03em;
         }
@@ -319,7 +319,7 @@
             <div class="nav-tabs" role="tablist">
                 <button class="tab-button active" data-tab="overview">Overview</button>
                 <button class="tab-button" data-tab="core">Core Feed</button>
-                <button class="tab-button" data-tab="protection">Protection</button>
+                <button class="tab-button" data-tab="protection">Comment Safety</button>
                 <button class="tab-button" data-tab="quickstart">Quick Start</button>
                 <button class="tab-button" data-tab="community">Community</button>
             </div>
@@ -329,7 +329,7 @@
             <section id="overview" class="tabs-panel active">
                 <div class="hero">
                     <div class="hero-copy">
-                        <span class="badge">Dark Mode</span>
+                        <span class="badge">Elegant Theme</span>
                         <h1>Your Facebook feed, filtered fast.</h1>
                         <p>FB-Refiner is a lightweight browser extension built around the features that matter most: blocking ads, hiding suggested content, removing reels, and delivering a cleaner, calmer feed. Everything else is secondary.</p>
                         <div class="hero-actions">
@@ -397,8 +397,8 @@
             </section>
 
             <section id="protection" class="tabs-panel">
-                <div class="section-title"><span>2</span><h2>Protection Tools</h2></div>
-                <p class="section-subtitle">These tools exist as extra protection, but they are experimental and depend on user-supplied word lists.</p>
+                <div class="section-title"><span>2</span><h2>Comment Safety (Experimental)</h2></div>
+                <p class="section-subtitle">These tools are experimental and improve with high-quality community dictionaries. They assist you while you interact, but are not a full moderation solution.</p>
                 <div class="grid grid-3" style="margin-top: 24px;">
                     <div class="feature-card">
                         <h3>☝️ Hold Your Finger</h3>
@@ -430,6 +430,10 @@
                 </div>
                 <div class="note-card" style="margin-top: 24px;">
                     <strong>Transparent warning:</strong> These protection features are not a replacement for moderation. They only catch terms that appear in your custom dictionaries, so use them as a helpful assist, not a guarantee.
+                    <ul style="margin-top:12px;">
+                        <li><strong>Quick tip:</strong> You can add words directly from Facebook using the extension's <em>right-click</em> context menu. Select text → Right click → "Add to FB-Refiner (Hard/Soft)" to save words instantly.</li>
+                        <li><strong>Where it appears:</strong> Words added this way show under Extension Settings → Context Menu lists.</li>
+                    </ul>
                 </div>
             </section>
 
@@ -456,29 +460,22 @@
 
             <section id="community" class="tabs-panel">
                 <div class="section-title"><span>4</span><h2>Community & Lists</h2></div>
-                <p class="section-subtitle">FB-Refiner is community-powered. The strongest results come from shared, well-crafted dictionaries.</p>
-                <div class="grid grid-2" style="margin-top: 24px;">
-                    <div class="feature-card">
-                        <h3>Import Community Lists</h3>
-                        <p>Use ready-made dictionaries for profanity, hate speech, and other sensitive topics.</p>
-                        <ul class="feature-list">
-                            <li>Upload .txt files with one word per line</li>
-                            <li>Combine multiple files safely</li>
-                            <li>Use community-approved lists for better coverage</li>
-                        </ul>
+                <p class="section-subtitle">FB-Refiner is community-powered. Import curated `.txt` dictionaries or preview community lists and contribute your own.</p>
+
+                <div id="loader" style="text-align: center; padding: 18px; color: var(--accent); display:none;"><i>Loading lists...</i></div>
+                <div id="files-grid" class="grid dict-grid" style="margin-top:18px;"></div>
+
+                <div style="margin-top: 28px; padding: 20px;" class="card">
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                        <a class="button primary" href="https://tally.so/r/A7AE9y" target="_blank">Submit Word List</a>
+                        <a class="button secondary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists/discussions" target="_blank">Join Discussions</a>
+                        <a class="button secondary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists" target="_blank">Repo on GitHub</a>
                     </div>
-                    <div class="feature-card">
-                        <h3>Share your work</h3>
-                        <p>Have a great list? Add it to the repository so other users get stronger protection.</p>
-                        <ul class="feature-list">
-                            <li>Help the community improve</li>
-                            <li>Submit lists via GitHub</li>
-                            <li>Keep the tool honest and easy to use</li>
-                        </ul>
-                    </div>
+                    <p style="margin-top:12px; color:var(--text-muted);">Preview or download community lists. To add lists into the extension: download and import them via the extension popup.</p>
                 </div>
-                <div class="note-card" style="margin-top: 24px;">
-                    <strong>Community rule:</strong> Keep lists focused and simple. Complex or abusive lists reduce accuracy and harm the user experience.</div>
+                <div class="note-card" style="margin-top: 18px;">
+                    <strong>Community rule:</strong> Keep lists focused and simple. Complex or abusive lists reduce accuracy and harm the user experience.
+                </div>
             </section>
         </main>
 
@@ -499,6 +496,45 @@
                 document.getElementById(button.dataset.tab).classList.add('active');
             });
         });
+    </script>
+    <script>
+        // Fetch community list files from GitHub and render cards
+        (async function renderCommunityLists(){
+            const repo = 'ahmedeid5/FB-Refiner-Community-Lists';
+            const loader = document.getElementById('loader');
+            const grid = document.getElementById('files-grid');
+            if (!grid || !loader) return;
+            loader.style.display = 'block';
+            try {
+                const res = await fetch(`https://api.github.com/repos/${repo}/contents/lists`);
+                const data = await res.json();
+                loader.style.display = 'none';
+                if (!Array.isArray(data)) return;
+                const txt = data.filter(f => f.name.endsWith('.txt'));
+                txt.forEach(f => {
+                    const name = f.name.replace(/_/g,' ').replace(/\.(txt)$/, '');
+                    const card = document.createElement('div'); card.className = 'feature-card';
+                    card.innerHTML = `<h4 style="color:var(--accent); margin:0 0 8px;">${name}</h4>
+                        <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+                            <a class="button secondary" href="${f.download_url}" target="_blank">Download</a>
+                            <button class="button secondary" data-url="${f.download_url}">Preview</button>
+                        </div>`;
+                    const previewBtn = card.querySelector('button[data-url]');
+                    previewBtn.onclick = async () => {
+                        const u = previewBtn.getAttribute('data-url');
+                        const txt = await fetch(u).then(r=>r.text()).catch(()=>'');
+                        const modal = document.createElement('div');
+                        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:99999;padding:20px;';
+                        modal.innerHTML = `<div style="background:${'var(--surface)'};max-width:900px;width:100%;border-radius:12px;padding:20px;color:var(--text);max-height:80vh;overflow:auto;"><h3 style="margin-top:0;">Preview: ${name}</h3><pre style="white-space:pre-wrap;color:var(--text-muted);">${escapeHtml(txt).slice(0,2000)}</pre><div style="margin-top:12px;text-align:right"><button id=closePreview class='button secondary'>Close</button></div></div>`;
+                        document.body.appendChild(modal);
+                        document.getElementById('closePreview').onclick = () => modal.remove();
+                    };
+                    grid.appendChild(card);
+                });
+            } catch (err) { loader.style.display='none'; console.warn('lists fetch failed', err); }
+
+            function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        })();
     </script>
 </body>
 </html>
