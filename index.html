@@ -462,6 +462,10 @@
                 <div class="section-title"><span>4</span><h2>Community & Lists</h2></div>
                 <p class="section-subtitle">FB-Refiner is community-powered. Import curated `.txt` dictionaries or preview community lists and contribute your own.</p>
 
+                <div class="note-card" style="margin-top:8px;">
+                    <strong>مهم — قراءة قبل الاستخدام:</strong>
+                    <p style="margin:8px 0 0; color:var(--text-muted);">قوائم المجتمع هنا تجريبية. قد تكون قصيرة أو غير شاملة، وقد تحتوي أحيانًا كلمات تبدو بريئة في سياقات أخرى. صانع الإضافة ركّز التطوير على العربية (خاصة المصرية) والإنجليزية، لذلك دقّق في القوائم بلغتك قبل الاستيراد ولا تعتمد على هذه القوائم كحماية تامة.</p>
+                </div>
                 <div id="loader" style="text-align: center; padding: 18px; color: var(--accent); display:none;"><i>Loading lists...</i></div>
                 <div id="files-grid" class="grid dict-grid" style="margin-top:18px;"></div>
 
@@ -516,7 +520,7 @@
                     const card = document.createElement('div'); card.className = 'feature-card';
                     card.innerHTML = `<h4 style="color:var(--accent); margin:0 0 8px;">${name}</h4>
                         <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-                            <a class="button secondary" href="${f.download_url}" target="_blank">Download</a>
+                            <a class="button secondary" href="${f.download_url}" target="_blank" download="${f.name}">Download</a>
                             <button class="button secondary" data-url="${f.download_url}">Preview</button>
                         </div>`;
                     const previewBtn = card.querySelector('button[data-url]');
