@@ -8,36 +8,40 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg: #06020f;
-            --surface: #0f0b16;
-            --surface-2: #18121f;
-            --border: rgba(255,255,255,0.06);
-            --primary: #9b59ff; /* vivid purple */
-            --accent: #1d6bff;  /* Facebook blue accent */
-            --accent-2: #4e99ff; /* blue pop */
+            --bg: #04060d;
+            --surface: #0d1325;
+            --surface-2: #121b2f;
+            --border: rgba(72,120,255,0.18);
+            --primary: #1877f2;
+            --accent: #3090ff;
+            --accent-2: #78b8ff;
             --warn: #ff8a66;
-            --text: #f3f6fb;
-            --text-muted: #9aa3b2;
-            --shadow: 0 34px 80px rgba(6,4,10,0.6);
+            --text: #eef4ff;
+            --text-muted: #94a6c9;
+            --shadow: 0 40px 90px rgba(4,8,22,0.55);
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at top, rgba(78,153,255,0.08), transparent 30%),
-                        linear-gradient(180deg, #07080c 0%, #050608 100%);
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            background: radial-gradient(circle at 15% 10%, rgba(24,119,242,0.18), transparent 26%),
+                        radial-gradient(circle at 80% 20%, rgba(78,153,255,0.10), transparent 18%),
+                        linear-gradient(180deg, #061026 0%, #04060d 100%);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
         }
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background-image: radial-gradient(circle at 20% 10%, rgba(78,153,255,0.12), transparent 15%),
-                              radial-gradient(circle at 80% 40%, rgba(54,255,172,0.1), transparent 12%),
-                              radial-gradient(circle at 60% 80%, rgba(255,106,81,0.08), transparent 14%);
+            background-image: radial-gradient(circle at 20% 10%, rgba(78,153,255,0.14), transparent 16%),
+                              radial-gradient(circle at 80% 40%, rgba(100,164,255,0.08), transparent 14%),
+                              radial-gradient(circle at 60% 80%, rgba(29,107,242,0.08), transparent 16%);
             pointer-events: none;
+            opacity: 0.92;
             z-index: 0;
         }
         .page {
@@ -45,7 +49,7 @@
             z-index: 1;
             max-width: 1180px;
             margin: 0 auto;
-            padding: 24px 20px 60px;
+            padding: 28px 24px 68px;
         }
         .topbar {
             display: flex;
@@ -53,7 +57,8 @@
             justify-content: space-between;
             gap: 16px;
             align-items: center;
-            padding: 18px 0;
+            padding: 24px 0 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .brand {
             display: inline-flex;
@@ -63,24 +68,26 @@
             color: var(--text);
             font-weight: 800;
             letter-spacing: -0.02em;
+            font-size: 1.08rem;
         }
         .brand-icon {
-            width: 54px;
-            height: 54px;
-            clip-path: polygon(0 0, 100% 0, 75% 58%, 55% 100%, 45% 100%, 25% 58%);
-            background: linear-gradient(180deg, #1d6bff 0%, #1462d7 100%);
+            width: 56px;
+            height: 56px;
+            clip-path: polygon(0 0, 100% 0, 100% 32%, 60% 100%, 40% 100%, 0 32%);
+            background: linear-gradient(180deg, #1d7df6 0%, #0860d1 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+            box-shadow: 0 22px 50px rgba(24, 119, 242, 0.24);
+            border: 1px solid rgba(255,255,255,0.08);
         }
         .brand-icon::after {
             content: '';
             position: absolute;
             inset: 8px 0 0 0;
             background: rgba(255,255,255,0.12);
-            clip-path: polygon(0 0, 100% 0, 70% 58%, 55% 100%, 45% 100%, 30% 58%);
+            clip-path: polygon(0 0, 100% 0, 68% 56%, 55% 100%, 45% 100%, 32% 56%);
         }
         .brand-icon .brand-letter {
             position: relative;
@@ -103,40 +110,46 @@
             padding: 12px 18px;
             border-radius: 14px;
             cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
             font-size: 0.95rem;
             font-weight: 600;
         }
         .tab-button:hover {
             transform: translateY(-1px);
             border-color: rgba(78,153,255,0.5);
+            background: rgba(78,153,255,0.12);
         }
         .tab-button.active {
             color: #fff;
-            border-color: rgba(78,153,255,0.9);
-            background: linear-gradient(135deg, rgba(78,153,255,0.35), rgba(54,255,172,0.18));
+            border-color: rgba(78,153,255,0.95);
+            background: linear-gradient(135deg, rgba(24,119,242,0.26), rgba(54,255,172,0.16));
         }
         .hero {
-            padding: 64px 0 48px;
+            padding: 68px 0 48px;
             display: grid;
+            grid-template-columns: 1.4fr 1fr;
             gap: 32px;
+            position: relative;
+            align-items: center;
         }
         .hero-copy {
-            max-width: 760px;
+            max-width: 720px;
         }
         .hero-copy h1 {
-            font-size: clamp(3rem, 4.5vw, 5rem);
-            line-height: 0.95;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            font-size: clamp(3rem, 4.2vw, 4.6rem);
+            line-height: 0.98;
             margin: 0 0 20px;
-            letter-spacing: -0.04em;
-            background: linear-gradient(135deg, #8ab9ff, #1d6bff 80%);
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #9abfff, #1d7df6 85%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 28px 90px rgba(24,119,242,0.12);
         }
         .hero-copy p {
             font-size: 1.15rem;
             color: var(--text-muted);
-            margin: 0 0 30px;
+            margin: 0 0 32px;
             max-width: 680px;
         }
         .hero-actions {
@@ -147,34 +160,37 @@
         .button {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             border: none;
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 16px 24px;
             font-weight: 700;
             cursor: pointer;
             text-decoration: none;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
         }
         .button.primary {
-            background: linear-gradient(135deg, #4e99ff, #1d6bff 95%);
-            color: #020617;
-            box-shadow: 0 20px 40px rgba(30, 99, 255, 0.22);
+            background: linear-gradient(135deg, #1d7df6, #4e99ff);
+            color: #ffffff;
+            box-shadow: 0 22px 48px rgba(24,119,242,0.24);
         }
         .button.secondary {
             background: rgba(255,255,255,0.06);
             color: var(--text);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(101,148,255,0.22);
+            backdrop-filter: blur(14px);
         }
         .button:hover { transform: translateY(-2px); }
+        .button.primary:hover { box-shadow: 0 26px 62px rgba(24,119,242,0.28); }
         .hero-note {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 14px 18px;
-            border-radius: 18px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
+            padding: 16px 20px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
             color: var(--text-muted);
             font-size: 0.95rem;
             max-width: 720px;
@@ -186,32 +202,135 @@
             min-width: 56px;
             height: 32px;
             border-radius: 999px;
-            background: linear-gradient(90deg, rgba(155,89,255,0.12), rgba(0,229,255,0.08));
+            background: linear-gradient(90deg, rgba(38,125,255,0.16), rgba(0,229,255,0.08));
             color: var(--text);
             font-weight: 800;
             letter-spacing: 0.03em;
         }
         .card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 28px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 32px;
             box-shadow: var(--shadow);
+            padding: 36px;
+            backdrop-filter: blur(10px);
+        }
+        .hero-panel {
+            position: relative;
+            background: rgba(11,18,35,0.9);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 32px;
+            box-shadow: 0 28px 80px rgba(0,0,0,0.25);
+            backdrop-filter: blur(18px);
             padding: 34px;
+            overflow: hidden;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .hero-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 80% 10%, rgba(56,156,255,0.22), transparent 22%);
+            pointer-events: none;
+        }
+        .hero-panel::after {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(29,123,246,0.18);
+            right: -60px;
+            top: -60px;
+            filter: blur(24px);
+            pointer-events: none;
+        }
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 26px;
+            position: relative;
+            z-index: 1;
+        }
+        .panel-chip {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 999px;
+            color: #d4e3ff;
+            padding: 10px 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .panel-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .panel-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 18px 20px;
+        }
+        .panel-list li .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1d7df6;
+            box-shadow: 0 0 18px rgba(29,123,246,0.4);
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+        .panel-list li strong {
+            color: #ffffff;
+            display: block;
+            font-size: 0.98rem;
+        }
+        .panel-list li span {
+            color: var(--text-muted);
+            font-size: 0.94rem;
+            line-height: 1.6;
         }
         .grid { display: grid; gap: 26px; }
         .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .feature-card {
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-            background: rgba(255,255,255,0.02);
-            padding: 30px;
-            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            padding: 32px;
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 90px;
+            height: 4px;
+            background: linear-gradient(90deg, rgba(29,123,246,0.8), rgba(78,153,255,0.3));
+            border-radius: 0 0 16px 0;
         }
         .feature-card:hover {
-            transform: translateY(-6px);
-            background: rgba(78,153,255,0.08);
-            border-color: rgba(78,153,255,0.28);
+            transform: translateY(-7px);
+            background: rgba(44,78,147,0.16);
+            border-color: rgba(78,153,255,0.32);
+            box-shadow: 0 26px 50px rgba(4,10,30,0.22);
         }
         .feature-card h3 {
             margin: 0 0 18px;
@@ -245,16 +364,19 @@
         .section-title h2 {
             margin: 0;
             font-size: clamp(2rem, 2.6vw, 2.8rem);
+            line-height: 1.05;
         }
         .section-title span {
             display: inline-flex;
-            width: 44px;
-            height: 44px;
-            border-radius: 16px;
-            background: rgba(78,153,255,0.16);
+            width: 48px;
+            height: 48px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(29,123,246,0.22), rgba(78,153,255,0.1));
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
+            color: #dcefff;
+            box-shadow: 0 10px 25px rgba(24,119,242,0.12);
         }
         .section-subtitle {
             color: var(--text-muted);
@@ -291,9 +413,10 @@
         .note-card {
             padding: 26px 28px;
             border-radius: 24px;
-            background: rgba(255,255,255,0.025);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
             color: var(--text-muted);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.015), 0 18px 50px rgba(0,0,0,0.15);
         }
         .note-card strong { color: #f2f6ff; }
         .note-card ul { list-style: none; padding-left: 0; margin-top: 18px; display: grid; gap: 12px; }
@@ -316,7 +439,7 @@
         .footer a { color: var(--text-muted); text-decoration: none; font-weight: 600; }
         @media (max-width: 940px) {
             .grid-3, .grid-2 { grid-template-columns: 1fr; }
-            .hero { padding-top: 48px; }
+            .hero { padding-top: 48px; grid-template-columns: 1fr; }
         }
         @media (max-width: 680px) {
             .topbar { flex-direction: column; align-items: flex-start; }
@@ -353,26 +476,18 @@
                             <a class="button secondary" href="#core">See Core Features</a>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="section-title"><span>⚡</span><h2>What makes FB-Refiner different?</h2></div>
-                        <p class="section-subtitle">It focuses on the feed cleanup experience: no fake promises, no bloated AI claims, and no guesswork. Users get cleaner output instantly with the features that already work.</p>
-                        <div class="grid grid-2" style="margin-top: 26px;">
-                            <div class="note-card">
-                                <strong>Core strengths:</strong>
-                                <ul>
-                                    <li>Hide ads, sponsored posts, and suggested feeds</li>
-                                    <li>Block the Reels section with one toggle</li>
-                                    <li>Filter feed posts by custom keywords</li>
-                                </ul>
-                            </div>
-                            <div class="note-card">
-                                <strong>Important note:</strong>
-                                <ul>
-                                    <li>Comment filtering and profanity blocking are experimental.</li>
-                                    <li>They only work well when you upload your own word lists.</li>
-                                    <li>Do not rely on them as a complete moderation system.</li>
-                                </ul>
-                            </div>
+                    <div class="hero-panel">
+                        <div class="panel-header">
+                            <div class="panel-chip">Facebook Feed Shield</div>
+                            <div class="panel-chip">v28.6</div>
+                        </div>
+                        <div style="position:relative; z-index:1;">
+                            <p style="margin:0 0 24px; color:var(--text); font-size:1rem; line-height:1.7;">A premium feed-control console designed for Facebook browsing. Fast ad removal, Reels cleanup, and list-powered filtering in one modern extension experience.</p>
+                            <ul class="panel-list">
+                                <li><span class="dot"></span><div><strong>Ad & suggestion removal</strong><span>Keep your feed clean and focused with automatic clutter blocking.</span></div></li>
+                                <li><span class="dot"></span><div><strong>Reels & UI cleanup</strong><span>Hide the Reels panel and restore the classic scrolling experience.</span></div></li>
+                                <li><span class="dot"></span><div><strong>Community list preview</strong><span>Import curated dictionries and preview them instantly inside the site.</span></div></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
