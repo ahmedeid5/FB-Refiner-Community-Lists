@@ -3,323 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FB-Refiner - Community Dictionary Hub</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>FB-Refiner — Cleaner Facebook Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1e293b;
-            --secondary: #334155;
-            --accent: #3b82f6;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-dim: #64748b;
-            --border: #e2e8f0;
+            --bg: #050608;
+            --surface: #11131a;
+            --surface-2: #171a24;
+            --border: rgba(255,255,255,0.08);
+            --primary: #4e99ff;
+            --primary-strong: #70b7ff;
+            --accent: #36ffac;
+            --warn: #ff6a51;
+            --text: #e9edf5;
+            --text-muted: #8c95ab;
+            --shadow: 0 30px 80px rgba(0,0,0,0.35);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
-            color: var(--text-main);
-            line-height: 1.5;
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top, rgba(78,153,255,0.08), transparent 30%),
+                        linear-gradient(180deg, #07080c 0%, #050608 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
-
-        header {
-            background: var(--primary);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle at 20% 10%, rgba(78,153,255,0.12), transparent 15%),
+                              radial-gradient(circle at 80% 40%, rgba(54,255,172,0.1), transparent 12%),
+                              radial-gradient(circle at 60% 80%, rgba(255,106,81,0.08), transparent 14%);
+            pointer-events: none;
+            z-index: 0;
         }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 24px 20px 60px;
+        }
+        .topbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            padding: 18px 0;
+        }
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .brand-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(78,153,255,0.22), rgba(54,255,172,0.14));
+            display: grid;
+            place-items: center;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+            font-size: 1.25rem;
+        }
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .tab-button {
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
+            padding: 12px 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .tab-button:hover {
+            transform: translateY(-1px);
+            border-color: rgba(78,153,255,0.5);
+        }
+        .tab-button.active {
+            color: #fff;
+            border-color: rgba(78,153,255,0.9);
+            background: linear-gradient(135deg, rgba(78,153,255,0.35), rgba(54,255,172,0.18));
+        }
+        .hero {
+            padding: 64px 0 48px;
+            display: grid;
+            gap: 32px;
+        }
+        .hero-copy {
+            max-width: 760px;
+        }
+        .hero-copy h1 {
+            font-size: clamp(3rem, 4.5vw, 5rem);
+            line-height: 0.95;
+            margin: 0 0 20px;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #8ab9ff, #36ffac 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-copy p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin: 0 0 30px;
+            max-width: 680px;
+        }
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            border-radius: 14px;
+            padding: 16px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .button.primary {
+            background: linear-gradient(135deg, #4e99ff, #36ffac 95%);
+            color: #020617;
+            box-shadow: 0 20px 40px rgba(30, 99, 255, 0.22);
+        }
+        .button.secondary {
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .button:hover { transform: translateY(-2px); }
+        .hero-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 720px;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 56px;
+            height: 32px;
+            border-radius: 999px;
+            background: rgba(54,255,172,0.13);
+            color: #b6ffda;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+        }
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+        .grid { display: grid; gap: 26px; }
+        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .feature-card {
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            padding: 30px;
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            background: rgba(78,153,255,0.08);
+            border-color: rgba(78,153,255,0.28);
+        }
+        .feature-card h3 {
+            margin: 0 0 18px;
+            font-size: 1.35rem;
+        }
+        .feature-card p {
+            margin: 0 0 18px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        .feature-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+        .feature-list li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            color: var(--text-muted);
+            font-size: 0.98rem;
+        }
+        .feature-list li::before {
+            content: '▹';
+            color: var(--primary);
+            margin-top: 2px;
+            font-size: 0.9rem;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .section-title h2 {
+            margin: 0;
+            font-size: clamp(2rem, 2.6vw, 2.8rem);
+        }
+        .section-title span {
+            display: inline-flex;
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            background: rgba(78,153,255,0.16);
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .section-subtitle {
+            color: var(--text-muted);
+            max-width: 760px;
+            line-height: 1.8;
+        }
+        .status-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02);
+        }
+        .status-table th,
+        .status-table td {
+            padding: 20px 22px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            text-align: left;
+            color: var(--text);
+        }
+        .status-table th { color: var(--text-muted); font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
+        .status-table tr:last-child td { border-bottom: none; }
+        .pill {
+            display: inline-flex;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
             font-weight: 700;
         }
-
-        header p {
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #cbd5e1;
+        .pill.stable { background: rgba(54,255,172,0.14); color: #b8ffdb; }
+        .pill.experimental { background: rgba(255,106,81,0.14); color: #ffb49c; }
+        .note-card {
+            padding: 26px 28px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
         }
-
-        .container {
-            max-width: 1200px;
-            margin: -40px auto 40px;
-            padding: 0 20px;
-        }
-
-        /* Status Banner */
-        .experimental-banner {
-            background: #fffbeb;
-            border: 1px solid #fde68a;
-            color: #92400e;
-            padding: 15px 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-box {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-            border: 1px solid var(--border);
-        }
-
-        .section-header {
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--bg);
-            padding-bottom: 15px;
-        }
-
-        .section-header h2 {
-            font-size: 1.5rem;
+        .note-card strong { color: #f2f6ff; }
+        .note-card ul { list-style: none; padding-left: 0; margin-top: 18px; display: grid; gap: 12px; }
+        .note-card li::before {
+            content: '•';
             color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-right: 10px;
         }
-
-        .grid {
+        .tabs-panel { display: none; }
+        .tabs-panel.active { display: block; }
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.06);
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            gap: 18px;
+            justify-items: center;
         }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            transition: 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .footer p { color: var(--text-muted); margin: 0; font-size: 0.95rem; }
+        .footer a { color: var(--text-muted); text-decoration: none; font-weight: 600; }
+        @media (max-width: 940px) {
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .hero { padding-top: 48px; }
         }
-
-        .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        @media (max-width: 680px) {
+            .topbar { flex-direction: column; align-items: flex-start; }
+            .nav-tabs { width: 100%; justify-content: flex-start; overflow-x: auto; }
+            .tab-button { flex: 1 0 auto; }
+            .hero-actions { flex-direction: column; }
         }
-
-        .card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: var(--primary);
-        }
-
-        .card p {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-bottom: 20px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            background: var(--bg);
-        }
-
-        .info-card {
-            background: #eff6ff;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #1e40af;
-        }
-
-        footer {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center; justify-content: center;
-        }
-        .modal-content {
-            background: white;
-            width: 90%; max-width: 700px;
-            border-radius: 16px; padding: 30px;
-            max-height: 80vh; display: flex; flex-direction: column;
-        }
-        .modal-body {
-            background: #f1f5f9;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-y: auto;
-            font-family: monospace;
-            white-space: pre-wrap;
-            margin: 20px 0;
-            font-size: 0.9rem;
-        }
-
-        #loader { text-align: center; padding: 40px; color: var(--accent); }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>FB-Refiner Hub</h1>
-        <p>Community-driven word lists to help customize your Facebook experience. Our core feed tools work out of the box, while comment protection relies on the quality of these dictionaries.</p>
-    </header>
-
-    <div class="container">
-        <!-- Reality Check Banner -->
-        <div class="experimental-banner">
-            <i class="fas fa-info-circle" style="font-size: 1.2rem;"></i>
-            <p><strong>Note on Protection Tools:</strong> Features like "Hold Your Finger" and "Toxic Filter" are experimental. Their effectiveness depends entirely on the word lists you import. They may miss certain variations or slang unless specifically added to your dictionary.</p>
-        </div>
-
-        <div class="section-box">
-            <div class="section-header">
-                <h2><i class="fas fa-book"></i> Available Dictionaries</h2>
+    <div class="page">
+        <header class="topbar">
+            <a class="brand" href="#overview">
+                <span class="brand-icon">FB</span>
+                <span>FB-Refiner</span>
+            </a>
+            <div class="nav-tabs" role="tablist">
+                <button class="tab-button active" data-tab="overview">Overview</button>
+                <button class="tab-button" data-tab="core">Core Feed</button>
+                <button class="tab-button" data-tab="protection">Protection</button>
+                <button class="tab-button" data-tab="quickstart">Quick Start</button>
+                <button class="tab-button" data-tab="community">Community</button>
             </div>
-            
-            <div id="loader"><i class="fas fa-spinner fa-spin"></i> Checking repository for lists...</div>
-            <div id="files-grid" class="grid"></div>
+        </header>
 
-            <div class="info-card">
-                <i class="fas fa-lightbulb"></i> <strong>Pro Tip:</strong> For best results, import dictionaries that match your language settings in the extension. You can combine multiple lists for broader protection.
-            </div>
-        </div>
+        <main>
+            <section id="overview" class="tabs-panel active">
+                <div class="hero">
+                    <div class="hero-copy">
+                        <span class="badge">Dark Mode</span>
+                        <h1>Your Facebook feed, filtered fast.</h1>
+                        <p>FB-Refiner is a lightweight browser extension built around the features that matter most: blocking ads, hiding suggested content, removing reels, and delivering a cleaner, calmer feed. Everything else is secondary.</p>
+                        <div class="hero-actions">
+                            <a class="button primary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists">Download the Extension</a>
+                            <a class="button secondary" href="#core">See Core Features</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="section-title"><span>⚡</span><h2>What makes FB-Refiner different?</h2></div>
+                        <p class="section-subtitle">It focuses on the feed cleanup experience: no fake promises, no bloated AI claims, and no guesswork. Users get cleaner output instantly with the features that already work.</p>
+                        <div class="grid grid-2" style="margin-top: 26px;">
+                            <div class="note-card">
+                                <strong>Core strengths:</strong>
+                                <ul>
+                                    <li>Hide ads, sponsored posts, and suggested feeds</li>
+                                    <li>Block the Reels section with one toggle</li>
+                                    <li>Filter feed posts by custom keywords</li>
+                                </ul>
+                            </div>
+                            <div class="note-card">
+                                <strong>Important note:</strong>
+                                <ul>
+                                    <li>Comment filtering and profanity blocking are experimental.</li>
+                                    <li>They only work well when you upload your own word lists.</li>
+                                    <li>Do not rely on them as a complete moderation system.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <div class="section-box" style="text-align: center;">
-            <div class="section-header" style="border: none; text-align: center;">
-                <h2>Contribute to the Project</h2>
-                <p style="color: var(--text-dim);">Found words that are missing? Help us improve the community lists.</p>
-            </div>
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 10px;">
-                <button data-tally-open="A7AE9y" class="btn btn-primary" style="padding: 12px 30px;">Submit via Form</button>
-                <a href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists/discussions" class="btn btn-outline" style="padding: 12px 30px;">GitHub Discussions</a>
-            </div>
-        </div>
+            <section id="core" class="tabs-panel">
+                <div class="section-title"><span>1</span><h2>Core Feed Engine</h2></div>
+                <p class="section-subtitle">These are the features users should trust first. They are the foundation of FB-Refiner and work immediately on Facebook feed pages.</p>
+                <div class="grid grid-3" style="margin-top: 24px;">
+                    <div class="feature-card">
+                        <h3>🚫 Block Ads & Suggestions</h3>
+                        <p>Removes sponsored posts, feed recommendations, and promotional clutter so your feed feels cleaner and more relevant.</p>
+                        <ul class="feature-list">
+                            <li>Removes ads and sponsored content</li>
+                            <li>Hides suggested posts and pages</li>
+                            <li>Makes feed browsing smoother</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎬 Hide Reels Section</h3>
+                        <p>Turn off the Reels experience completely and keep your browsing focused on actual posts.</p>
+                        <ul class="feature-list">
+                            <li>Removes Reels panel from Facebook</li>
+                            <li>One-click toggle in the floating menu</li>
+                            <li>Stops the endless scroll trap</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📝 Keyword Feed Filter</h3>
+                        <p>Type your own keywords and hide feed posts that contain the topics you want to skip.</p>
+                        <ul class="feature-list">
+                            <li>Custom keyword filtering</li>
+                            <li>Live filtering in the floating UI</li>
+                            <li>Works for feed posts, not comments</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="protection" class="tabs-panel">
+                <div class="section-title"><span>2</span><h2>Protection Tools</h2></div>
+                <p class="section-subtitle">These tools exist as extra protection, but they are experimental and depend on user-supplied word lists.</p>
+                <div class="grid grid-3" style="margin-top: 24px;">
+                    <div class="feature-card">
+                        <h3>☝️ Hold Your Finger</h3>
+                        <p>Review your comment before posting. The extension checks drafts against the lists you upload.</p>
+                        <ul class="feature-list">
+                            <li>Detects words in your dictionary</li>
+                            <li>Shows the matched word</li>
+                            <li>Offers a chance to edit before sending</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>☣️ Filter Toxic Comments</h3>
+                        <p>Automatically hides visible comments that match your custom lists while you browse.</p>
+                        <ul class="feature-list">
+                            <li>Hides comments in real time</li>
+                            <li>Depends on your uploaded words</li>
+                            <li>Works best with strong dictionaries</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔍 Comment Search</h3>
+                        <p>Search comments instantly and highlight matches without scrolling through long threads.</p>
+                        <ul class="feature-list">
+                            <li>Search within visible comments</li>
+                            <li>Real-time highlighting</li>
+                            <li>Fast and responsive</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="note-card" style="margin-top: 24px;">
+                    <strong>Transparent warning:</strong> These protection features are not a replacement for moderation. They only catch terms that appear in your custom dictionaries, so use them as a helpful assist, not a guarantee.
+                </div>
+            </section>
+
+            <section id="quickstart" class="tabs-panel">
+                <div class="section-title"><span>3</span><h2>Quick Start</h2></div>
+                <p class="section-subtitle">Get FB-Refiner working in seconds with the recommended setup path.</p>
+                <div class="grid grid-3" style="margin-top: 24px;">
+                    <div class="feature-card">
+                        <h3>1. Open the floating menu</h3>
+                        <p>Click the small FB icon on Facebook to open the extension panel.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>2. Enable core filters</h3>
+                        <p>Turn on Block Ads, Block Reels, and Keyword Filter for the best feed experience.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>3. Optional upload lists</h3>
+                        <p>If you want comment protection, import your own dictionary files from the extension settings.</p>
+                    </div>
+                </div>
+                <div class="note-card" style="margin-top: 24px;">
+                    <strong>Best practice:</strong> Use the extension first for feed cleanup, then only add list-based protection if you want extra filtering. The main feed tools are the priority.</div>
+            </section>
+
+            <section id="community" class="tabs-panel">
+                <div class="section-title"><span>4</span><h2>Community & Lists</h2></div>
+                <p class="section-subtitle">FB-Refiner is community-powered. The strongest results come from shared, well-crafted dictionaries.</p>
+                <div class="grid grid-2" style="margin-top: 24px;">
+                    <div class="feature-card">
+                        <h3>Import Community Lists</h3>
+                        <p>Use ready-made dictionaries for profanity, hate speech, and other sensitive topics.</p>
+                        <ul class="feature-list">
+                            <li>Upload .txt files with one word per line</li>
+                            <li>Combine multiple files safely</li>
+                            <li>Use community-approved lists for better coverage</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Share your work</h3>
+                        <p>Have a great list? Add it to the repository so other users get stronger protection.</p>
+                        <ul class="feature-list">
+                            <li>Help the community improve</li>
+                            <li>Submit lists via GitHub</li>
+                            <li>Keep the tool honest and easy to use</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="note-card" style="margin-top: 24px;">
+                    <strong>Community rule:</strong> Keep lists focused and simple. Complex or abusive lists reduce accuracy and harm the user experience.</div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>FB-Refiner v28.6 — Built for Facebook feed control and calm browsing.</p>
+            <p><a href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists" target="_blank">View on GitHub</a></p>
+        </footer>
     </div>
 
-    <footer>
-        <p>© 2026 FB-Refiner Project. Focused on providing user-controlled feed customization.</p>
-        <div style="margin-top: 15px;">
-            <a href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists" style="color: var(--accent); text-decoration: none;">GitHub Repository</a>
-        </div>
-    </footer>
-
-    <!-- Modal -->
-    <div id="preview-modal" class="modal">
-        <div class="modal-content">
-            <h3 id="modal-title">Preview</h3>
-            <div id="modal-body" class="modal-body"></div>
-            <button class="btn btn-primary" onclick="closeModal()">Close</button>
-        </div>
-    </div>
-
-    <script async src="https://tally.so/widgets/embed.js"></script>
     <script>
-        const REPO = "ahmedeid5/FB-Refiner-Community-Lists";
-        const grid = document.getElementById('files-grid');
-        const loader = document.getElementById('loader');
-        const modal = document.getElementById('preview-modal');
-        const modalBody = document.getElementById('modal-body');
-        const modalTitle = document.getElementById('modal-title');
-
-        async function fetchFiles() {
-            try {
-                const response = await fetch(`https://api.github.com/repos/${REPO}/contents/lists`);
-                const data = await response.json();
-                loader.style.display = 'none';
-
-                if (Array.isArray(data)) {
-                    const txtFiles = data.filter(f => f.name.endsWith('.txt'));
-                    txtFiles.forEach(file => {
-                        // Clean up the name for display
-                        let name = file.name.replace('_Profanity_List.txt', '')
-                                          .replace('.txt', '')
-                                          .replace(/_/g, ' ');
-                        
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.innerHTML = `
-                            <div>
-                                <h3>${name}</h3>
-                                <p>Size: ${(file.size / 1024).toFixed(1)} KB</p>
-                            </div>
-                            <div class="btn-group">
-                                <a href="${file.download_url}" class="btn btn-primary" download>Download</a>
-                                <button class="btn btn-outline" onclick="previewFile('${file.download_url}', '${name}')">Preview</button>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                }
-            } catch (error) {
-                loader.innerHTML = "Error loading files from GitHub.";
-            }
-        }
-
-        async function previewFile(url, name) {
-            modalBody.innerText = "Loading content...";
-            modalTitle.innerText = `Preview: ${name}`;
-            modal.style.display = 'flex';
-            const response = await fetch(url);
-            const text = await response.text();
-            modalBody.innerText = text;
-        }
-
-        function closeModal() { modal.style.display = 'none'; }
-        window.onclick = (e) => { if(e.target == modal) closeModal(); }
-
-        fetchFiles();
+        const buttons = document.querySelectorAll('.tab-button');
+        const panels = document.querySelectorAll('.tabs-panel');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                buttons.forEach(btn => btn.classList.remove('active'));
+                panels.forEach(panel => panel.classList.remove('active'));
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
     </script>
 </body>
 </html>
