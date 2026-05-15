@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FB-Refiner — Cleaner Facebook Feed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --bg: #06020f;
@@ -329,7 +330,7 @@
             <section id="overview" class="tabs-panel active">
                 <div class="hero">
                     <div class="hero-copy">
-                        <span class="badge">Elegant Theme</span>
+                        <span class="badge">Refiner Neon</span>
                         <h1>Your Facebook feed, filtered fast.</h1>
                         <p>FB-Refiner is a lightweight browser extension built around the features that matter most: blocking ads, hiding suggested content, removing reels, and delivering a cleaner, calmer feed. Everything else is secondary.</p>
                         <div class="hero-actions">
@@ -462,21 +463,19 @@
                 <div class="section-title"><span>4</span><h2>Community & Lists</h2></div>
                 <p class="section-subtitle">FB-Refiner is community-powered. Import curated `.txt` dictionaries or preview community lists and contribute your own.</p>
 
-                <div class="note-card" style="margin-top:8px;">
-                    <strong>مهم — قراءة قبل الاستخدام:</strong>
-                    <p style="margin:8px 0 0; color:var(--text-muted);">قوائم المجتمع هنا تجريبية. قد تكون قصيرة أو غير شاملة، وقد تحتوي أحيانًا كلمات تبدو بريئة في سياقات أخرى. صانع الإضافة ركّز التطوير على العربية (خاصة المصرية) والإنجليزية، لذلك دقّق في القوائم بلغتك قبل الاستيراد ولا تعتمد على هذه القوائم كحماية تامة.</p>
+                <div style="margin-bottom:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                    <a class="button primary" href="https://tally.so/r/A7AE9y" target="_blank"><i class="fas fa-upload"></i>&nbsp; Submit Word List</a>
+                    <a class="button secondary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists/discussions" target="_blank"><i class="fab fa-discussions" style="transform:translateY(1px)"></i>&nbsp; Join Discussions</a>
+                    <a class="button secondary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists" target="_blank"><i class="fab fa-github"></i>&nbsp; Repo on GitHub</a>
                 </div>
+
+                <div class="note-card" style="margin-top:6px;">
+                    <strong>Important — Read before use (English):</strong>
+                    <p style="margin:8px 0 0; color:var(--text-muted);">Community word lists available below are experimental. They may be short, incomplete, or include words that are harmless in some contexts. The extension has been developed and primarily tested for Egyptian Arabic and English. Other languages and lists have not been thoroughly normalized or fuzz-tested; they might work, or they might not. Do not rely on these lists as a complete moderation solution — review lists in your language before importing.</p>
+                </div>
+
                 <div id="loader" style="text-align: center; padding: 18px; color: var(--accent); display:none;"><i>Loading lists...</i></div>
                 <div id="files-grid" class="grid dict-grid" style="margin-top:18px;"></div>
-
-                <div style="margin-top: 28px; padding: 20px;" class="card">
-                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-                        <a class="button primary" href="https://tally.so/r/A7AE9y" target="_blank">Submit Word List</a>
-                        <a class="button secondary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists/discussions" target="_blank">Join Discussions</a>
-                        <a class="button secondary" href="https://github.com/ahmedeid5/FB-Refiner-Community-Lists" target="_blank">Repo on GitHub</a>
-                    </div>
-                    <p style="margin-top:12px; color:var(--text-muted);">Preview or download community lists. To add lists into the extension: download and import them via the extension popup.</p>
-                </div>
                 <div class="note-card" style="margin-top: 18px;">
                     <strong>Community rule:</strong> Keep lists focused and simple. Complex or abusive lists reduce accuracy and harm the user experience.
                 </div>
@@ -520,10 +519,21 @@
                     const card = document.createElement('div'); card.className = 'feature-card';
                     card.innerHTML = `<h4 style="color:var(--accent); margin:0 0 8px;">${name}</h4>
                         <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-                            <a class="button secondary" href="${f.download_url}" target="_blank" download="${f.name}">Download</a>
-                            <button class="button secondary" data-url="${f.download_url}">Preview</button>
+                            <button class="button secondary" data-download="${f.download_url}" data-name="${f.name}"><i class='fas fa-download'></i>&nbsp;Download</button>
+                            <button class="button secondary" data-url="${f.download_url}"><i class='fas fa-eye'></i>&nbsp;Preview</button>
                         </div>`;
                     const previewBtn = card.querySelector('button[data-url]');
+                    const downloadBtn = card.querySelector('button[data-download]');
+                    downloadBtn.onclick = async () => {
+                        const u = downloadBtn.getAttribute('data-download');
+                        const fname = downloadBtn.getAttribute('data-name') || 'list.txt';
+                        try {
+                            const res = await fetch(u);
+                            const blob = await res.blob();
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+                        } catch (e) { console.warn('Download failed', e); window.open(u, '_blank'); }
+                    };
                     previewBtn.onclick = async () => {
                         const u = previewBtn.getAttribute('data-url');
                         const txt = await fetch(u).then(r=>r.text()).catch(()=>'');
